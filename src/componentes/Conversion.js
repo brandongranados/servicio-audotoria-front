@@ -12,18 +12,26 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
-import { Button, CardActions, CardContent, Typography } from "@mui/material";
+import { Button, CardActions, CardContent, Modal, Typography } from "@mui/material";
 
+import { useEstadoCarga } from "./EstadoCarga";
+import ModalError from "./ModalError";
 
 let Conversion = function(){
+    //MODAL RUEDA DE CARGANDO
+    const { setValor } = useEstadoCarga();
+    //MODAL DE ERRORES EN LA INTERPRETACION DE EXCEL
+    const [boolError, setBoolError] = useState(false);
+    const [valError, setValError] = useState([]);
+    //CARGA DE ARCHIVOS
     const [archBase64, setArchBase64] = useState("");
     const [tipoArchivo, setTipoArchivo] = useState("");
     const [nomArch, setNomArch] = useState("");
-
+    //MANIPULACION CUADRO DE ALERTA
     const [alerta, setAlerta] = useState(false);
     const [statusAlerta, setStatusAlerta] = useState("warning");
     const [msmAlerta, setMsmAlerta] = useState("");
-
+    //IDENTIFICAR EL TIPO DE REPORTE A GENERAR
     const [tipoDoc, setTipoDoc] = useState(0);
 
     let cambiarTipoDoc = (e) => {
@@ -73,15 +81,20 @@ let Conversion = function(){
 
     let ajax = async function(){
         let fech = new Date();
+        setValor(true);
         try {
             let obj = { archivo: archBase64, tipo: tipoArchivo, 
                         nombre: nomArch, fecha: fech.toISOString(), tipoPDF: tipoDoc };
             let peticion = await axios.post("http://localhost:9090/compartirExcel", obj);
             let respuesta = peticion.data;
 
+            setValor(false);
             setStatusAlerta( "success" );
             setMsmAlerta( respuesta.msm );
         } catch (error) {
+            setValor(false);
+            if( Object.keys(error.response.data).length > 1 )
+                crearLogErrores(error.response.data);
             setStatusAlerta( "warning" );
             setMsmAlerta( error.response.data.msm );
         }
@@ -90,33 +103,40 @@ let Conversion = function(){
         setArchBase64("");
     };
 
+    let crearLogErrores = function(err){
+        let array = Object.values(err);
+        let errores = array.filter( (iterador) => iterador != err.msm );
+        
+        setValError(errores);
+        setBoolError(true);
+    };
+
     return(
-        <Box pt={11} pb={8} >
+        <Box pt={11} pb={8} sx={{marginRight: "7vh"}} >
             <Grid container>
-                <Grid item sm={1} />
-                <Grid item sm={10} className="carta">
+                <Grid item xs={12} className="carta">
                     <Card sx={{ border: 3,  
                             borderColor: 'primary.main', 
                             height: '80vh',
-                            backgroundColor: "rgba(0, 0, 0, 0.2)" }}
+                            backgroundColor: "rgba(255, 255, 255, 0.7)" }}
                         className="carta" >
                         <CardContent className="carta">
-                            <Typography variant="h3" align="center" sx={{color:"white"}}>
+                            <Typography variant="h3" align="center" sx={{color:"black"}}>
                                 <BusinessIcon fontSize="large" />
                                 Departamento de Ciencias e Ingenier&iacute;a en Computaci&oacute;n
                             </Typography>
                         </CardContent>
                         <CardActions className="carta">
                             <FormControl sx={{width:"60%", 
-                                                backgroundColor:"rgba(0, 0, 0, 0.35)"}}>
-                                <InputLabel id="tipoDoc" sx={{fontSize:"20px", color:"white"}}>Seleccionar</InputLabel>
+                                                backgroundColor:"rgba(255, 255, 255, 0.3)"}}>
+                                <InputLabel id="tipoDoc" sx={{fontSize:"20px", color:"black"}}>Seleccionar</InputLabel>
                                 <Select
                                     labelId="tipoDoc"
                                     id="tipoDocId"
                                     value={tipoDoc}
                                     label="Seleccionar"
                                     onChange={cambiarTipoDoc}
-                                    sx={{color:"white"}}
+                                    sx={{color:"black"}}
                                 >
                                     <MenuItem value={0}>Elaboraci&oacute;n de Dict&aacute;menes COSIE ante el CTCE</MenuItem>
                                     <MenuItem value={1}>Servicios Bibliotecarios</MenuItem>
@@ -138,7 +158,6 @@ let Conversion = function(){
                         </CardActions>
                     </Card>
                 </Grid>
-                <Grid item sm={1} />
             </Grid>
             <Snackbar spacing={2} sx={{ width: '70%' }}
                     autoHideDuration={5000}
@@ -152,6 +171,13 @@ let Conversion = function(){
                     }
                 </Alert>
             </Snackbar>
+            <ModalError boolError={boolError} setBoolError={setBoolError}>
+                <Typography sx={{ mt: 2, mb: 2, color:"white" }}>
+                    {valError.map( (iterador) => (
+                        <p>{iterador}</p>
+                    ) )}
+                </Typography>
+            </ModalError>
         </Box>
     );
 };
