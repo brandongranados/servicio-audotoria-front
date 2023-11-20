@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Modal } from "@mui/material";
+import { CircularProgress, Modal } from "@mui/material";
 import { useEffect, useState } from "react";
 
 let Cargando = function({estadoModal}){

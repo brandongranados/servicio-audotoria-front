@@ -76,7 +76,7 @@ let Periodo = function() {
 
     let cerrarAlerta = function(event, tipo){
         
-        if( tipo == "clickaway" )
+        if( tipo === "clickaway" )
             return;
         setAlerta(false);
     };
@@ -117,15 +117,11 @@ let Periodo = function() {
 
     return(
         <>
-            <Grid container sx={{
-                marginTop:"12vh",
-                marginBottom:"7vh"
-            }}>
+            <Grid>
                 <Grid item xs={12}>
                     <Card sx={{ border: 3,  
-                            borderColor: 'primary.main', 
-                            height: '80vh',
-                            marginRight: "7vh",
+                            borderColor: 'primary.main',
+                            height:"80vh",
                             backgroundColor: "rgba(255, 255, 255, 0.7)" }} >
                         <CardContent>
                             <Box sx={{display:"flex", justifyContent:"center"}} >

@@ -38,13 +38,9 @@ let Navegacion = function(){
 
     return(
         <Card sx={{ border: 3,  
-        borderColor: 'primary.main', 
-        height: '80vh',
-        backgroundColor: "rgba(255, 255, 255, 0.7)",
-        marginTop:"12vh",
-        marginBottom:"7vh",
-        marginLeft:"7vh",
-        marginRight: "7vh" }} >
+        borderColor: 'primary.main',
+        height:"80vh",
+        backgroundColor: "rgba(255, 255, 255, 0.7)" }} >
             <CardContent>
                 <MenuList>
                     {

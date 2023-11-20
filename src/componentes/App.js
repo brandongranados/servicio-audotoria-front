@@ -1,6 +1,6 @@
 
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
-import { Grid } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 
 import Conversion from './Conversion';
 import Periodo from './Periodo';
@@ -16,18 +16,20 @@ let App = function() {
 
   return (
     <BrowserRouter>
-      <Grid container>
-        <Grid item xs={4}>
-          <Navegacion />
+      <Box sx={{paddingTop:"10vh", paddingBottom:"10vh"}}>
+        <Grid container>
+          <Grid item xs={4} sx={{paddingLeft:"3%", paddingRight:"1.5%"}}>
+            <Navegacion />
+          </Grid>
+          <Grid item xs={8} sx={{paddingLeft:"1.5%", paddingRight:"3%"}}>
+            <Routes>
+              <Route path='/' element={<Conversion />} />
+              <Route path='/administrador' element={<Periodo />} />
+            </Routes>
+          </Grid>
         </Grid>
-        <Grid item xs={8}>
-          <Routes>
-            <Route path='/' element={<Conversion />} />
-            <Route path='/administrador' element={<Periodo />} />
-          </Routes>
-        </Grid>
-      </Grid>
-      <Cargando estadoModal={valor} />
+        <Cargando estadoModal={valor} />
+      </Box>
     </BrowserRouter>
   );
 }

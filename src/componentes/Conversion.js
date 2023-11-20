@@ -1,7 +1,6 @@
 import { useState } from "react";
 import axios from 'axios';
 import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import BusinessIcon from '@mui/icons-material/Business';
 import Card from '@mui/material/Card';
@@ -12,7 +11,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
-import { Button, CardActions, CardContent, Modal, Typography } from "@mui/material";
+import { Button, CardActions, CardContent, Typography } from "@mui/material";
 
 import { useEstadoCarga } from "./EstadoCarga";
 import ModalError from "./ModalError";
@@ -44,7 +43,7 @@ let Conversion = function(){
 
     let cerrarAlerta = function(event, tipo){
         
-        if( tipo == "clickaway" )
+        if( tipo === "clickaway" )
             return;
         setAlerta(false);
     };
@@ -55,8 +54,8 @@ let Conversion = function(){
             leer.onload = (e) => {
               let resultado = leer.result;
               let cadenaArray = resultado.split(",");
-              let type = archivo.type;
-              let tipo = type.split("/");
+              let type = archivo.name;
+              let tipo = type.split(".");
               resolve({ archBase64: cadenaArray[1], tipoArchivo: tipo[1], nombre: archivo.name });
             };
             leer.onerror = (e) => {
@@ -105,19 +104,19 @@ let Conversion = function(){
 
     let crearLogErrores = function(err){
         let array = Object.values(err);
-        let errores = array.filter( (iterador) => iterador != err.msm );
+        let errores = array.filter( (iterador) => iterador !== err.msm );
         
         setValError(errores);
         setBoolError(true);
     };
 
     return(
-        <Box pt={11} pb={8} sx={{marginRight: "7vh"}} >
+        <Box>
             <Grid container>
                 <Grid item xs={12} className="carta">
                     <Card sx={{ border: 3,  
                             borderColor: 'primary.main', 
-                            height: '80vh',
+                            height:"80vh",
                             backgroundColor: "rgba(255, 255, 255, 0.7)" }}
                         className="carta" >
                         <CardContent className="carta">

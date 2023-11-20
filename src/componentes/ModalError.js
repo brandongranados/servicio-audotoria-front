@@ -1,5 +1,5 @@
 import { Modal, Button, Box } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 let ModalError = function({ boolError, setBoolError, children }){
     
