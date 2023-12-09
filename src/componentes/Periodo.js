@@ -1,5 +1,5 @@
 import 'dayjs/locale/es';
-import dayjs from 'dayjs';
+import dayjs, { locale } from 'dayjs';
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Grid from "@mui/material/Grid";
@@ -14,6 +14,9 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import '../css/Periodo.css';
 import styled from '@emotion/styled';
 import axios from 'axios';
+import DateFnsUtils from '@date-io/date-fns';
+import { DateField } from '@mui/x-date-pickers';
+
 
 const StyledSelect = styled(Select)(({ theme }) => ({
     '& #lPeriodo':{
@@ -126,35 +129,35 @@ let Periodo = function() {
                         <CardContent>
                             <Box sx={{display:"flex", justifyContent:"center"}} >
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DemoContainer components={['DatePicker']}>
-                                        <FormControl sx={{ width:"9%",
-                                                    backgroundColor:"rgba(255, 255, 255, 0.3)"}}>
-                                            <InputLabel id="lPeriodo" 
-                                                sx={{fontSize:"20px", color:"black"}}>
-                                                    Periodo
-                                            </InputLabel>
-                                            <StyledSelect
-                                                labelId="lPeriodo"
-                                                id="periodo"
-                                                value={periodo}
-                                                label="Periodo del ano"
-                                                onChange={cambiarPeriodo}
-                                                sx={{color:"black"}}
-                                            >
-                                                <MenuItem value={1}>1</MenuItem>
-                                                <MenuItem value={2}>2</MenuItem>
-                                            </StyledSelect>
-                                        </FormControl>
-                                        <StyledDatePicker label="Fecha inicio periodo"
-                                            value={dayjs(fechaIni.toISOString())} 
-                                            onChange={cambiarFechaIni}/>
-                                        <StyledDatePicker label="Fecha fin periodo"
-                                            value={dayjs(fechaFin.toISOString())}
-                                            onChange={cambiarFechaFin} />
-                                        <Button variant="contained" color="success" onClick={ajax} >
-                                            Actualizar periodos
-                                        </Button>
-                                    </DemoContainer>
+                                    <FormControl sx={{ width:"9%",
+                                                backgroundColor:"rgba(255, 255, 255, 0.3)"}}>
+                                        <InputLabel id="lPeriodo" 
+                                            sx={{fontSize:"20px", color:"black"}}>
+                                                Periodo
+                                        </InputLabel>
+                                        <StyledSelect
+                                            labelId="lPeriodo"
+                                            id="periodo"
+                                            value={periodo}
+                                            label="Periodo del ano"
+                                            onChange={cambiarPeriodo}
+                                            sx={{color:"black"}}
+                                        >
+                                            <MenuItem value={1}>1</MenuItem>
+                                            <MenuItem value={2}>2</MenuItem>
+                                        </StyledSelect>
+                                    </FormControl>
+                                    <StyledDatePicker label="Fecha inicio periodo"
+                                        format='DD/MM/YYYY'
+                                        value={dayjs(fechaIni.toISOString())} 
+                                        onChange={cambiarFechaIni}/>
+                                    <StyledDatePicker label="Fecha fin periodo"
+                                        format='DD/MM/YYYY'
+                                        value={dayjs(fechaFin.toISOString())}
+                                        onChange={cambiarFechaFin} />
+                                    <Button variant="contained" color="success" onClick={ajax} >
+                                        Actualizar periodos
+                                    </Button>
                                 </LocalizationProvider>
                             </Box>
                         </CardContent>
